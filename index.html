@@ -33,14 +33,6 @@
       .row.content {height: auto;} 
     }
   </style>
-  <script>
-  var currQ = "pytanie"
-  var currA = "odpowiedz"
-  
-  function showAnswer() {
-  	Document.getElementById("answer").innerHTML = cuurA;
-  }
-  </script>
 </head>
 <body>
 
@@ -50,18 +42,49 @@
       <h2 id="number">1/200</h2>
       <h4 id="question">Pytanie</h4>
       <h5 id="answer"></h5>
-      		<button onClick="showAnswer()" type="button" class="btn">Pokaż</button>
+      		<button onclick="showAnswer()" id="show" type="button" class="btn">Pokaż</button>
       <br><br>
       <hr>
-		<button onClick="know" type="button" class="btn btn-success">Umiem</button>
-        <button onClick="notKnow" type="button" class="btn btn-danger">Nie umiem</button>
+		<button onclick="know()" id="know" type="button" class="btn btn-success">Umiem</button>
+        <button onclick="notKnow()" id="notKnow" type="button" class="btn btn-danger">Nie umiem</button>
     </div>
   </div>
 </div>
 
-<footer class="container-fluid">
-  <p>Footer Text</p>
-</footer>
+<script>
+	let questions = '[{"question":"a","answer":"a"},{"question":"b","answer":"b"},{"question":"c","answer":"c"}]'
+    var parsed = JSON.parse(questions);
+    nextQuestion();
+    
+    function showAnswer() {
+     document.getElementById("answer").innerHTML = parsed[0].answer;
+    }
+    
+    function know() {
+    	parsed.splice(0,1);
+        nextQuestion();
+    }
+    
+    function notKnow() {
+    	parsed.push(parsed.splice(0, 1)[0]);
+        nextQuestion();
+    }
+    
+    function nextQuestion() {
+    	document.getElementById("answer").innerHTML = "";
+  		document.getElementById("question").innerHTML = "";
+		
 
+      	if (parsed.length >0) {
+        	document.getElementById("number").innerHTML = "Zostało: " + parsed.length;
+        	document.getElementById("question").innerHTML = parsed[0].question;
+      	} else {
+        	document.getElementById("question").innerHTML = "Koniec";
+            document.getElementById("know").style.visibility = 'hidden';
+            document.getElementById("notKnow").style.visibility = 'hidden';
+          	document.getElementById("show").style.visibility = 'hidden';
+        }
+    }
+    </script>
 </body>
 </html>
